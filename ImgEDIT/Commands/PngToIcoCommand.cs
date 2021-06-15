@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Windows;
+using ImageMagick;
+using ImgEDIT.Services;
+using ImgEDIT.ViewModels;
+
+namespace ImgEDIT.Commands
+{
+    public class PngToIcoCommand : BaseCommand
+    {
+        private readonly MainWindowViewModel _mainWindow;
+
+        public PngToIcoCommand(MainWindowViewModel mainWindow)
+        {
+            _mainWindow = mainWindow;
+        }
+        public override bool CanExecute(object parameter)
+        {
+            if (!string.IsNullOrWhiteSpace(_mainWindow.ImagePath))
+            {
+                string imageExtension = ImageService.GetFileFormat(_mainWindow.ImagePath).ToString().ToLower();
+                if (imageExtension == "png")
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public override void Execute(object parameter)
+        {
+            using (MagickImage image = new MagickImage(_mainWindow.ImagePath))
+            {
+                string imageName = Path.GetFileNameWithoutExtension(_mainWindow.ImagePath);
+                MagickFormat imageFormat = MagickFormat.Ico;
+                string newFilePath = $"{imageName}_converted.{imageFormat.ToString().ToLower()}";
+                image.Resize(256, 256);
+                image.Write(newFilePath, imageFormat);
+                _mainWindow.ProcessedImagePath = newFilePath;
+                _mainWindow.ProgressBarValue = 100;
+                MessageBox.Show("Изображение обработано");
+                _mainWindow.ProgressBarValue = 0;
+            }
+        }
+    }
+}
