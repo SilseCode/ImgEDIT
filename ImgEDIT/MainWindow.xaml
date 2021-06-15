@@ -4,9 +4,80 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImgEDIT"
+        xmlns:vm="clr-namespace:ImgEDIT.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="ImgEDIT" Height="650" Width="800"
+        ResizeMode="NoResize">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2.8*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Name="Image_label" Grid.Row="0" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF939393" FontSize="36" Content="{Binding ImageLabel}"></Label>
+        <Image Grid.Row="0" Source="{Binding ImagePath, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"/>
+        <ProgressBar Name="MainProgressBar" Grid.Row="1" Value="{Binding ProgressBarValue, UpdateSourceTrigger=PropertyChanged}"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <Button Height="40" Content="PNG to JPG" Command="{Binding PngToJpgCommand}"/>
+                <Button Height="40" Content="JPG to PNG" Command="{Binding JpgToPngCommand}"/>
+                <Button Height="40" Content="PNG to ICO" Command="{Binding PngToIcoCommand}"/>
+                <Button Height="40" Content="JPG to ICO" Command="{Binding JpgToIcoCommand}"/>
+            </StackPanel>
+            <Grid Grid.Column="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Изменить размер изображения" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" ></TextBlock>
+                <Grid Grid.Row="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.65*"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <Label Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Высота" FontSize="14"></Label>
+                                <Label Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Ширина" FontSize="14"></Label>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBox Height="25" Text="{Binding ImageHeight}"/>
+                                <TextBox Height="25" Text="{Binding ImageWidth}"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Content="Изменить размер" Command="{Binding ChangeSizeCommand}"/>
+                            <Button Grid.Row="1" Content="Добавить прозрачность" Command="{Binding MakeTransparent}"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Content="Открыть изображение" Command="{Binding OpenImageCommand}"/>
+                <Button Grid.Row="1" Content="Сохранить изображение" Command="{Binding SaveImageCommand}"/>
+            </Grid>
+        </Grid>
 
     </Grid>
 </Window>
